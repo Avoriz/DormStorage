@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DormStorageV1", "DormStorageV1\DormStorageV1.csproj", "{9564C42D-E876-4C97-8F6B-1B18D20A0ACD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9564C42D-E876-4C97-8F6B-1B18D20A0ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9564C42D-E876-4C97-8F6B-1B18D20A0ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9564C42D-E876-4C97-8F6B-1B18D20A0ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9564C42D-E876-4C97-8F6B-1B18D20A0ACD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {73B47AA9-1438-4EE6-934C-91C3697DCEAE}
+	EndGlobalSection
+EndGlobal
