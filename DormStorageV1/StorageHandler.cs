@@ -35,7 +35,8 @@ namespace DormStorageV1
         }
 
         public void Init()
-        { 
+        {
+            CheckForManifest(StorageFilePath);
             Header = ConsoleColor.DarkCyan;
             Information = ConsoleColor.Gray;
             Warning = ConsoleColor.Red;
@@ -43,6 +44,21 @@ namespace DormStorageV1
             UserPrompt = ConsoleColor.Yellow;
             Occupied = ConsoleColor.DarkGray;
             Available = ConsoleColor.White;
+        }
+
+        public void CheckForManifest(string filename)
+        {
+            if (!File.Exists(filename))
+            {
+                StorageDB = new XmlDocument();
+                StorageDB.PreserveWhitespace = true;
+                File.Create(filename).Close();
+                StorageDB.LoadXml(
+                    "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                    "<DormStorage>\n" +
+                    "</DormStorage>");
+                StorageDB.Save(filename);
+            }
         }
 
         public void LoadStorageManifest(string filePath)
