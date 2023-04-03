@@ -13,6 +13,7 @@ namespace DormStorageV1
     {
         static void Main(string[] args)
         {
+            Updater updater = new Updater();
             StorageHandler scla = new StorageHandler("StorageManifest.xml");
             while (true)
             {
