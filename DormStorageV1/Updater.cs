@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,13 +18,21 @@ namespace DormStorageV1
     {
         public string RemoteVersionPath { get; set; }
         public string RemoteVersion { get; set; }
+        public string RemoteInstall { get; set; }
+        public string DownloadPath 
+        { 
+            get
+            {
+                return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads"); 
+            }
+        }
         public string LocalVersion
         {
             get
             {
                 Assembly assembly = Assembly.GetExecutingAssembly();
-                FileVersionInfo localVersion = FileVersionInfo.GetVersionInfo(assembly.Location);
-                return localVersion.FileVersion;
+                Version localVersion = assembly.GetName().Version;
+                return localVersion.ToString() ;
             }
         }
 
@@ -32,7 +42,7 @@ namespace DormStorageV1
         }
         
         public Updater(string remoteVersionPath)
-        {
+        { 
             Init(remoteVersionPath);
         }
 
@@ -49,10 +59,12 @@ namespace DormStorageV1
                 }
                 RemoteVersionPath = remoteVersionUri;
                 FetchRemoteVersion(RemoteVersionPath);
-                if (RemoteVersion != LocalVersion)
+                if (RemoteVersion.Trim() != LocalVersion.Trim())
                 {
                     FetchUpdate(RemoteVersionPath);
+                    break;
                 }
+                break;
             }
         }
 
@@ -63,8 +75,11 @@ namespace DormStorageV1
             return RemoteVersion = remoteVersion;
         }
 
-        public void FetchUpdate(string remoteVersionUri) 
+        public async void FetchUpdate(string remoteVersionUri) 
         {
+            HttpClient client = new HttpClient();
+            var download = await client.GetAsync(remoteVersionUri);      
+            download.EnsureSuccessStatusCode();
 
         }
     }
