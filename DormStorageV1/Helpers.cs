@@ -63,6 +63,10 @@ namespace DormStorageV1
                 letter = c.ToString();
                 name.Add(letter);
             }
+            if (name.Count == 0)
+            {
+                return toCapitalize;
+            }
             string firstCap = name[0].ToUpperInvariant();
             name[0] = firstCap;
             return string.Join("", name);
