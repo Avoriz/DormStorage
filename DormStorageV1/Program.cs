@@ -13,7 +13,7 @@ namespace DormStorageV1
     {
         static void Main(string[] args)
         {
-            Updater updater = new Updater();
+            Updater updater = new Updater("https://github.com/Avoriz/DormStorage/blob/master/version.txt");
             StorageHandler scla = new StorageHandler("StorageManifest.xml");
             while (true)
             {
