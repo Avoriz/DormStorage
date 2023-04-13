@@ -16,7 +16,7 @@ namespace DormStorageV1
             StorageHandler scla = new StorageHandler("StorageManifest.xml");
             while (true)
             {
-                Helpers.PublishHeader("|| SCLA Dorm Storage System ||", ConsoleColor.Blue, "Welcome to the Dorm Storage System.\nPlease try: 'add', 'remove', 'detail', 'edit', 'clear', 'help', or 'list'.", ConsoleColor.White);
+                Helpers.PublishHeader("|| SCLA Dorm Storage System ||", ConsoleColor.Blue, "Welcome to the Dorm Storage System.\nPlease try: 'add', 'remove', 'detail', 'edit', 'editall', 'clear', 'help', or 'list'.", ConsoleColor.White);
                 Helpers.PublishPrompt("> ", ConsoleColor.Yellow);
                 string choice = Console.ReadLine().ToLowerInvariant();
                 if (choice.Equals("quit"))
@@ -37,13 +37,13 @@ namespace DormStorageV1
                             string id = add[1];
                             if (scla.AvailSpots.ContainsKey(id))
                             {
-                                Console.WriteLine("A slot with this ID already exists. Can't write to this spot.");
+                                Console.WriteLine("This registry number exists. Use 'edit' or 'editall' to manage it from here.");
                                 Console.ReadKey();
                                 Console.Clear();
                                 break;
                             }
                             scla.AddManifestElement(id, scla.StorageFilePath);
-                            Console.WriteLine("Successfully created Storage Slot " + id + ". It is currently empty.\nNo editability implemented yet.");
+                            Console.WriteLine("Successfully created Storage Slot " + id + ". It is currently empty.\nUse 'help edit' or 'help editall' to learn how to add data.");
                             Console.ReadKey();
                             Console.Clear();
                             break;
@@ -60,7 +60,7 @@ namespace DormStorageV1
                         {
                             if (scla.AvailSpots.ContainsKey(id))
                             {
-                                Console.WriteLine("A slot with this ID already exists. Can't write to this spot.");
+                                Console.WriteLine("This registry number exists. Use 'edit' or 'editall' to manage it from here.");
                                 Console.ReadKey();
                                 Console.Clear();
                                 break;
@@ -153,6 +153,61 @@ namespace DormStorageV1
                         break;
                     }
                 }
+                else if (choice.StartsWith("editall"))
+                {
+                    string[] arguments = choice.Split(' ');
+                    while (true)
+                    {
+                        if (arguments.Length > 6)
+                        {
+                            Console.WriteLine("Unexpected number of arguments. Needed 6, received " + arguments.Length);
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
+                        }
+                        if (arguments.Length < 6)
+                        {
+                            Console.WriteLine("Unexpected number of arguments. Needed 6, recevied " + arguments.Length);
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
+                        }
+                        string id = arguments[1];
+                        string owner = arguments[2].ToLowerInvariant();
+                        string room = arguments[3].ToUpperInvariant();
+                        string items = arguments[4];
+                        string paid = arguments[5];
+                        if (!scla.AvailSpots.ContainsKey(id))
+                        {
+                            Console.WriteLine("Registry not found. Try 'list' or 'add'. Use 'help' for more information.");
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
+                        }
+                        if (room.StartsWith("A") || room.StartsWith("B") || room.StartsWith("C") || room.StartsWith("D") || room.StartsWith("E") || room.StartsWith("F"))
+                        {
+                        }
+                        else
+                        {
+                            Console.WriteLine("Room number formatting needs to include the Wing letter and room number.");
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
+                        }
+                        if (!paid.Equals("yes") && !paid.Equals("no"))
+                        {
+                            Console.WriteLine("Paid status can only be 'yes' or 'no'.");
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
+                        }
+                        scla.EditSelectedRegistry(id, owner, room, items, paid, scla.StorageFilePath);
+                        Console.Clear();
+                        Console.WriteLine("Successfully edited Slot #" + id + " with the following data:");
+                        scla.DetailedSpot(id, scla.StorageFilePath);
+                        break;
+                    }
+                }
                 else if (choice.StartsWith("edit"))
                 {
                     string[] argument = choice.Split(' ');
@@ -205,7 +260,7 @@ namespace DormStorageV1
                     string key = choice.Substring(4).ToLowerInvariant();
                     if (key.Equals(""))
                     {
-                        Console.WriteLine("Help is able to tell you more about each command. Try adding them as a secondary argument: 'add', 'remove', or 'alter'.");
+                        Console.WriteLine("Help is able to tell you more about each command. Try adding them as a secondary argument.");
                         Console.ReadKey();
                         Console.Clear();
                     }
@@ -241,6 +296,15 @@ namespace DormStorageV1
                         Console.WriteLine("Keywords are: [owner], [items], [room], [paid]");
                         Console.WriteLine("Syntax: edit <id> <key> <replacement>");
                         Console.WriteLine("These can only be adjusted one at a time.");
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
+                    else if (key.Equals(" editall"))
+                    {
+                        Helpers.PublishWarning("Caution! This can cause irreversible changes!", ConsoleColor.Red);
+                        Console.WriteLine("The [EDITALL] command allows you to edit all details about a single storage unit.");
+                        Console.WriteLine("The syntax is simple: editall <id> <owner> <room> <items> <paid>");
+                        Helpers.PublishWarning("Do not use this to clear a registry's data! Use [CLEAR]!", ConsoleColor.DarkRed);
                         Console.ReadKey();
                         Console.Clear();
                     }

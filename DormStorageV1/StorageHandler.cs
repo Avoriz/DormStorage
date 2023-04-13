@@ -256,6 +256,10 @@ namespace DormStorageV1
             selectedNode.SetAttribute("room", room);
             selectedNode.SetAttribute("itemTotal", items);
             selectedNode.SetAttribute("paid", paid);
+            if (selectedNode.GetAttribute("status") == "empty")
+            {
+                selectedNode.SetAttribute("status", "filled");
+            }
             StorageDB.Save(file);
             LoadStorageManifest(StorageFilePath);
         }
