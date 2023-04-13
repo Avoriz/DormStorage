@@ -16,7 +16,7 @@ namespace DormStorageV1
             StorageHandler scla = new StorageHandler("StorageManifest.xml");
             while (true)
             {
-                Helpers.PublishHeader("|| SCLA Dorm Storage System ||", ConsoleColor.Blue, "Welcome to the Dorm Storage System.\nPlease try: 'add', 'remove', 'detail', 'clear', 'help', or 'list'.", ConsoleColor.White);
+                Helpers.PublishHeader("|| SCLA Dorm Storage System ||", ConsoleColor.Blue, "Welcome to the Dorm Storage System.\nPlease try: 'add', 'remove', 'detail', 'edit', 'clear', 'help', or 'list'.", ConsoleColor.White);
                 Helpers.PublishPrompt("> ", ConsoleColor.Yellow);
                 string choice = Console.ReadLine().ToLowerInvariant();
                 if (choice.Equals("quit"))
@@ -153,11 +153,52 @@ namespace DormStorageV1
                         break;
                     }
                 }
-                else if (choice.Equals("edit"))
+                else if (choice.StartsWith("edit"))
                 {
-                    Console.WriteLine("Not yet implemented.");
-                    Console.ReadKey();
-                    Console.Clear();
+                    string[] argument = choice.Split(' ');
+                    while (true)
+                    {
+                        if (argument.Length < 4)
+                        {
+                            Console.WriteLine("Insufficient arguments. Expected 4, recieved " + argument.Length);
+                            Console.WriteLine("Syntax: edit <id> <key> <replacement>");
+                            Console.WriteLine("Type 'help edit' for more information.");
+                            Console.ReadKey();
+                            Console.Clear();
+                        }
+                        else if (argument.Length > 4)
+                        {
+                            Console.WriteLine("Too many arguments. Expected 4, recieved " + argument.Length);
+                            Console.WriteLine("Syntax: edit <id> <key> <replacement>");
+                            Console.WriteLine("Type 'help edit' for more information.");
+                            Console.ReadKey();
+                            Console.Clear();
+                        }
+                        string id = argument[1].ToLowerInvariant();
+                        string key = argument[2].ToLowerInvariant();
+                        string value = "";
+                        if (key == "room")
+                        {
+                            value = argument[3].ToUpperInvariant();
+                        }
+                        else
+                        {
+                            value = argument[3].ToLowerInvariant();
+                        }
+                        if (!scla.AvailSpots.ContainsKey(id))
+                        {
+                            Console.WriteLine("Registry not found. Use 'list' to see slots.");
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
+                        }
+                        scla.EditSelectedRegistry(id, key, value, scla.StorageFilePath);
+                        Console.WriteLine("Successfully edited Slot #" + id + ".");
+                        Console.WriteLine(key + "'s original value has been replaced with " + value + ".");
+                        Console.ReadKey();
+                        Console.Clear();
+                        break;
+                    }
                 }
                 else if (choice.StartsWith("help"))
                 {
@@ -190,6 +231,16 @@ namespace DormStorageV1
                     else if (key.Equals(" detail"))
                     {
                         Console.WriteLine("The [DETAIL] command gives a deeper look at the specific slot.\nSyntax: detail <id>");
+                        Console.ReadKey();
+                        Console.Clear();
+                    }
+                    else if (key.Equals(" edit"))
+                    {
+                        Helpers.PublishWarning("Caution! This can cause irreversible alterations.", ConsoleColor.Red);
+                        Console.WriteLine("The [EDIT] command allows you to edit a specific element in a storage unit.");
+                        Console.WriteLine("Keywords are: [owner], [items], [room], [paid]");
+                        Console.WriteLine("Syntax: edit <id> <key> <replacement>");
+                        Console.WriteLine("These can only be adjusted one at a time.");
                         Console.ReadKey();
                         Console.Clear();
                     }

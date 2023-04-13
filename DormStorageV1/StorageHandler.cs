@@ -201,7 +201,7 @@ namespace DormStorageV1
             DetailedSpotPublish();
         }
 
-        public void DetailedSpotPublish()
+        private void DetailedSpotPublish()
         {
             string[] DictInventory = { "owner", "room", "itemTotal", "paid" };
             SpotDetail.TryGetValue("id", out string id);
@@ -214,8 +214,12 @@ namespace DormStorageV1
                 {
                     Helpers.PublishDetail(key.ToUpper(), UserPrompt, Helpers.CapitalizeName(value));
                 }
-                else 
-                { 
+                else if (key == "itemTotal")
+                {
+                    Helpers.PublishDetail("ITEM TOTAL: ", UserPrompt, value);
+                }
+                else
+                {
                     Helpers.PublishDetail(key.ToUpper(), UserPrompt, value);
                 }
             }
@@ -223,11 +227,37 @@ namespace DormStorageV1
             Console.Clear();
         }
 
-        public void EditSelectedRegistry(string id, string file)
+        public void EditSelectedRegistry(string id, string key, string replace, string file)
         {
             StorageDB = null;
             StorageDB = new XmlDocument();
             StorageDB.Load(file);
+            XmlElement selectedNode = (XmlElement)StorageDB.SelectSingleNode("/DormStorage/Slot[@id='" + id + "']");
+            if (key.Equals("items"))
+            {
+                key = "itemTotal";
+            }
+            selectedNode.SetAttribute(key, replace);
+            if (key.Equals("owner") && selectedNode.GetAttribute("status") == "empty")
+            {
+                selectedNode.SetAttribute("status", "filled");
+            }
+            StorageDB.Save(file);
+            LoadStorageManifest(StorageFilePath);
+        }
+
+        public void EditSelectedRegistry(string id, string owner, string room, string items, string paid, string file)
+        {
+            StorageDB = null;
+            StorageDB = new XmlDocument();
+            StorageDB.Load(file);
+            XmlElement selectedNode = (XmlElement)StorageDB.SelectSingleNode("/DormStorage/Slot[@id='" + id + "']");
+            selectedNode.SetAttribute("owner", owner);
+            selectedNode.SetAttribute("room", room);
+            selectedNode.SetAttribute("itemTotal", items);
+            selectedNode.SetAttribute("paid", paid);
+            StorageDB.Save(file);
+            LoadStorageManifest(StorageFilePath);
         }
     }
 }
