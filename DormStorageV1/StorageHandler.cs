@@ -81,6 +81,13 @@ namespace DormStorageV1
         {
             Console.Clear();
             Helpers.PublishHeader("|| Manifest List || ", Header);
+            if (AvailSpots.Count == 0)
+            {
+                Helpers.PublishWarning("\nNo registeries found in the manifest.", Information);
+                Console.ReadKey();
+                Console.Clear();
+                return;
+            }
             foreach (KeyValuePair<string, string> slot in AvailSpots)
             {
                 if (slot.Value == "filled")
