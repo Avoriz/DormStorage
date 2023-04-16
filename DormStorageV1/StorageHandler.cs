@@ -220,10 +220,17 @@ namespace DormStorageV1
                 if (key == "owner")
                 {
                     Helpers.PublishDetail(key.ToUpper(), UserPrompt, Helpers.CapitalizeName(value));
+                    continue;
                 }
-                else if (key == "itemTotal")
+                if (key == "itemTotal")
+                { 
+                    Helpers.PublishDetail("ITEM TOTAL", UserPrompt, value);
+                    continue;
+                }
+                if (key == "paid" && value == "no")
                 {
-                    Helpers.PublishDetail("ITEM TOTAL: ", UserPrompt, value);
+                    Helpers.PublishDetail("PAID", Warning, value);
+                    continue;
                 }
                 else
                 {
