@@ -136,7 +136,7 @@ namespace DormStorageV1
             slotAdder.SetAttribute("owner", owner);
             slotAdder.SetAttribute("room", room);
             slotAdder.SetAttribute("itemTotal", itemTotal);
-            slotAdder.SetAttribute("paid", paid);
+            slotAdder.SetAttribute("paid", Helpers.PaidValidator(paid, itemTotal));
             XmlNode storageData = StorageDB.SelectSingleNode("/DormStorage");
             storageData.AppendChild(slotAdder);
             StorageDB.Save(file);
@@ -227,7 +227,7 @@ namespace DormStorageV1
                     Helpers.PublishDetail("ITEM TOTAL", UserPrompt, value);
                     continue;
                 }
-                if (key == "paid" && value == "no")
+                if (key == "paid" && value.Contains("owes"))
                 {
                     Helpers.PublishDetail("PAID", Warning, value);
                     continue;
@@ -269,7 +269,7 @@ namespace DormStorageV1
             selectedNode.SetAttribute("owner", owner);
             selectedNode.SetAttribute("room", room);
             selectedNode.SetAttribute("itemTotal", items);
-            selectedNode.SetAttribute("paid", paid);
+            selectedNode.SetAttribute("paid", Helpers.PaidValidator(paid, items));
             if (selectedNode.GetAttribute("status") == "empty")
             {
                 selectedNode.SetAttribute("status", "filled");

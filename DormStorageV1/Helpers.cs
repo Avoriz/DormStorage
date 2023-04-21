@@ -71,5 +71,26 @@ namespace DormStorageV1
             name[0] = firstCap;
             return string.Join("", name);
         }
+
+        public static string PaidValidator(string paid, string itemTotal)
+        {
+            int.TryParse(itemTotal, out int result);
+            if (paid == "yes")
+            {
+                return "Paid.";
+            }
+            else if (paid == "no" && result < 4)
+            {
+                return "No payment needed.";
+            }
+            else if (paid == "no" && result > 4)
+            {
+                return "Student owes $" + ((result - 4) * 25) + ".";
+            }
+            else
+            {
+                return "Unable to validate payment.";
+            }
+        }
     }
 }
