@@ -251,7 +251,14 @@ namespace DormStorageV1
             {
                 key = "itemTotal";
             }
-            selectedNode.SetAttribute(key, replace);
+            else if (key.Equals("paid"))
+            {
+                selectedNode.SetAttribute(key, Helpers.PaidValidator(replace, selectedNode.GetAttribute("itemTotal")));
+            }
+            else
+            {
+                selectedNode.SetAttribute(key, replace);
+            }
             if (key.Equals("owner") && selectedNode.GetAttribute("status") == "empty")
             {
                 selectedNode.SetAttribute("status", "filled");

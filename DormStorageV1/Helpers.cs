@@ -77,7 +77,7 @@ namespace DormStorageV1
             int.TryParse(itemTotal, out int result);
             if (paid == "yes")
             {
-                return "Paid.";
+                return "No payment needed.";
             }
             else if (paid == "no" && result < 4)
             {
