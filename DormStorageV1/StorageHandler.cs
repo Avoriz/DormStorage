@@ -276,6 +276,15 @@ namespace DormStorageV1
             LoadStorageManifest(StorageFilePath);
         }
 
+        /// <summary>
+        /// This variation functions for the "editall" command. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="owner"></param>
+        /// <param name="room"></param>
+        /// <param name="items"></param>
+        /// <param name="paid"></param>
+        /// <param name="file"></param>
         public void EditSelectedRegistry(string id, string owner, string room, string items, string paid, string file)
         {
             StorageDB = null;
