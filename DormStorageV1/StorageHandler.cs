@@ -285,6 +285,7 @@ namespace DormStorageV1
         /// <param name="items"></param>
         /// <param name="paid"></param>
         /// <param name="file"></param>
+        /// <exception cref="InvalidCastException"/>
         public void EditSelectedRegistry(string id, string owner, string room, string items, string paid, string file)
         {
             StorageDB = null;

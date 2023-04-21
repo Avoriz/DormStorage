@@ -94,6 +94,11 @@ namespace DormStorageV1
             }
         }
 
+        /// <summary>
+        /// Verifies that the name is inputted correctly. OBSOLETE.
+        /// </summary>
+        /// <param name="owner"></param>
+        /// <returns>The owner's name is returned if formatted correctly; otherwise, error is returned in its place.</returns>
         public static string OwnerValidator(string owner)
         {
             while (true)
