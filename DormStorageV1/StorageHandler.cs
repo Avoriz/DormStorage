@@ -133,7 +133,7 @@ namespace DormStorageV1
             XmlElement slotAdder = StorageDB.CreateElement("Slot");
             slotAdder.SetAttribute("id", id);
             slotAdder.SetAttribute("status", "filled");
-            slotAdder.SetAttribute("owner", owner);
+            slotAdder.SetAttribute("owner", Helpers.OwnerValidator(owner));
             slotAdder.SetAttribute("room", room);
             slotAdder.SetAttribute("itemTotal", itemTotal);
             slotAdder.SetAttribute("paid", Helpers.PaidValidator(paid, itemTotal));
@@ -217,7 +217,12 @@ namespace DormStorageV1
             foreach(string key in DictInventory)
             {
                 SpotDetail.TryGetValue($"{key}", out string value);
-                if (key == "owner")
+                if (key == "owner" && value == "")
+                {
+                    Helpers.PublishDetail(key.ToUpper(), UserPrompt, "No owner.");
+                    continue;
+                }
+                else if (key == "owner" && !value.Equals(""))
                 {
                     Helpers.PublishDetail(key.ToUpper(), UserPrompt, Helpers.CapitalizeName(value));
                     continue;
@@ -254,6 +259,10 @@ namespace DormStorageV1
             else if (key.Equals("paid"))
             {
                 selectedNode.SetAttribute(key, Helpers.PaidValidator(replace, selectedNode.GetAttribute("itemTotal")));
+            }
+            else if (key.Equals("owner"))
+            {
+                selectedNode.SetAttribute(key, Helpers.OwnerValidator(replace));
             }
             else
             {

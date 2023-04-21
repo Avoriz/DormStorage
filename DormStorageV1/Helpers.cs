@@ -55,21 +55,22 @@ namespace DormStorageV1
 
         public static string CapitalizeName(string toCapitalize)
         {
-            char[] nameBreak = toCapitalize.ToCharArray();
-            string letter;
-            List<string> name = new List<string>();
-            foreach (char c in nameBreak)
+            string[] firstLast = toCapitalize.Split('_');
+            char[] firstChars = firstLast[0].ToCharArray();
+            char[] lastChars = firstLast[1].ToCharArray();
+            List<string> firstName = new List<string>();
+            List<string> lastName = new List<string>();
+            foreach (char c in firstChars)
             {
-                letter = c.ToString();
-                name.Add(letter);
+                firstName.Add(c.ToString());
             }
-            if (name.Count == 0)
+            foreach (char c in lastChars)
             {
-                return toCapitalize;
+                lastName.Add(c.ToString());
             }
-            string firstCap = name[0].ToUpperInvariant();
-            name[0] = firstCap;
-            return string.Join("", name);
+            firstName[0] = firstName[0].ToUpperInvariant();
+            lastName[0] = lastName[0].ToUpperInvariant();
+            return string.Join("", firstName) + " " + string.Join("", lastName); 
         }
 
         public static string PaidValidator(string paid, string itemTotal)
@@ -90,6 +91,19 @@ namespace DormStorageV1
             else
             {
                 return "Unable to validate payment.";
+            }
+        }
+
+        public static string OwnerValidator(string owner)
+        {
+            while (true)
+            {
+                if (!owner.Contains("_"))
+                {
+                    Helpers.PublishWarning("Name needs to follow this syntax: \n{First}_{Last}.\n", ConsoleColor.Red);
+                    return "error";
+                }
+                return owner;
             }
         }
     }

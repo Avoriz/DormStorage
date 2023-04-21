@@ -82,6 +82,13 @@ namespace DormStorageV1
                                 Console.Clear();
                                 break;
                             }
+                            if (!owner.Contains("_"))
+                            {
+                                Helpers.PublishWarning("Name syntax error. Should be: {First}_{Last}.", ConsoleColor.Red);
+                                Console.ReadKey();
+                                Console.Clear();
+                                break;
+                            }
                             scla.AddManifestElement(id, owner, room, itemTotal, paid, scla.StorageFilePath);
                             Console.WriteLine("Successfully created Storage #" + id + " owned by " + Helpers.CapitalizeName(owner) + ".\nThey have " + itemTotal + " item(s).");
                             Console.WriteLine("\nPress any key to continue. . .");
@@ -174,6 +181,13 @@ namespace DormStorageV1
                         }
                         string id = arguments[1];
                         string owner = arguments[2].ToLowerInvariant();
+                        if (!owner.Contains("_"))
+                        {
+                            Helpers.PublishWarning("Name syntax: {First}_{Last}; please fix.", ConsoleColor.Red);
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
+                        }
                         string room = arguments[3].ToUpperInvariant();
                         string items = arguments[4];
                         string paid = arguments[5];
@@ -239,6 +253,13 @@ namespace DormStorageV1
                         else
                         {
                             value = argument[3].ToLowerInvariant();
+                        }
+                        if (key == "owner" && !value.Contains("_"))
+                        {
+                            Helpers.PublishWarning("Name Syntax Error: Needs to follow {First}_{Last}.", ConsoleColor.Red);
+                            Console.ReadKey();
+                            Console.Clear();
+                            break;
                         }
                         if (!scla.AvailSpots.ContainsKey(id))
                         {
