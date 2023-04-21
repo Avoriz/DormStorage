@@ -35,6 +35,13 @@ namespace DormStorageV1
                         while (true)
                         {
                             string id = add[1];
+                            if (id.Equals(""))
+                            {
+                                Helpers.PublishWarning("Invalid ID inputted. Try again.", ConsoleColor.Red);
+                                Console.ReadKey();
+                                Console.Clear();
+                                break;
+                            }
                             if (scla.AvailSpots.ContainsKey(id))
                             {
                                 Console.WriteLine("This registry number exists. Use 'edit' or 'editall' to manage it from here.");
@@ -58,6 +65,13 @@ namespace DormStorageV1
                         string paid = add[5];
                         while (true)
                         {
+                            if (id.Equals(""))
+                            {
+                                Helpers.PublishWarning("Invalid ID inputted. Try again.", ConsoleColor.Red);
+                                Console.ReadKey();
+                                Console.Clear();
+                                break;
+                            }
                             if (scla.AvailSpots.ContainsKey(id))
                             {
                                 Console.WriteLine("This registry number exists. Use 'edit' or 'editall' to manage it from here.");
