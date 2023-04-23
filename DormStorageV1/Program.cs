@@ -9,7 +9,7 @@ namespace DormStorageV1
             StorageHandler scla = new StorageHandler("StorageManifest.xml");
             while (true)
             {
-                Helpers.PublishHeader("|| SCLA Dorm Storage System ||", ConsoleColor.Blue, "Welcome to the Dorm Storage System.\nPlease try: 'add', 'remove', 'detail', 'edit', 'editall', 'clear', 'help', or 'list'.", ConsoleColor.White);
+                Helpers.PublishHeader("|| SCLA Dorm Storage System v" + scla.LocalVersion + " ||", ConsoleColor.Blue, "Welcome to the Dorm Storage System.\nPlease try: 'add', 'remove', 'detail', 'edit', 'editall', 'clear', 'help', or 'list'.", ConsoleColor.White);
                 Helpers.PublishPrompt("> ", ConsoleColor.Yellow);
                 string choice = Console.ReadLine().ToLowerInvariant();
                 if (choice.Equals("quit"))

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -16,6 +17,15 @@ namespace DormStorageV1
         public XmlDocument StorageDB { get; set; }
         public Dictionary<string, string> AvailSpots;
         public Dictionary<string, string> SpotDetail;
+        public string LocalVersion
+        {
+            get
+            {
+                Assembly assembly = Assembly.GetExecutingAssembly();
+                Version localVersion = assembly.GetName().Version;
+                return localVersion.ToString();
+            }
+        }
         public string StorageFilePath { get; set; }
         public static ConsoleColor Header { get; set; }
         public static ConsoleColor Information { get; set; }
