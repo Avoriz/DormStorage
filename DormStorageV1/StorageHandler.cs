@@ -71,7 +71,7 @@ namespace DormStorageV1
             foreach(XmlElement node in root.ChildNodes )
             {
                 string key = node.GetAttribute("id");
-                string value = node.GetAttribute("status");
+                string value = node.GetAttribute("owner");
 
                 AvailSpots.Add(key, value);
             }
@@ -90,15 +90,16 @@ namespace DormStorageV1
             }
             foreach (KeyValuePair<string, string> slot in AvailSpots)
             {
-                if (slot.Value == "filled")
+                if (!slot.Value.Equals(""))
                 {
                     Console.ForegroundColor = Occupied;
+                    Console.WriteLine("Storage Slot #" + slot.Key + ": Occupied by " + Helpers.CapitalizeName(slot.Value));
                 }
-                else if (slot.Value == "empty") 
+                else if (slot.Value == "") 
                 {
                     Console.ForegroundColor = Available;
+                    Console.WriteLine("Storage Slot #" + slot.Key + ": Empty");
                 }
-                Console.WriteLine("Storage Slot #" + slot.Key+ ": " + slot.Value);
                 Console.ResetColor();
             }
             Helpers.PublishPrompt("\nPress any key to continue. . .", UserPrompt);
@@ -114,7 +115,6 @@ namespace DormStorageV1
             StorageDB.Load(file);
             XmlElement slotAdder = StorageDB.CreateElement("Slot");
             slotAdder.SetAttribute("id", id);
-            slotAdder.SetAttribute("status", "empty");
             slotAdder.SetAttribute("owner", "");
             slotAdder.SetAttribute("room", "");
             slotAdder.SetAttribute("itemTotal", "");
@@ -132,7 +132,6 @@ namespace DormStorageV1
             StorageDB.Load(file);
             XmlElement slotAdder = StorageDB.CreateElement("Slot");
             slotAdder.SetAttribute("id", id);
-            slotAdder.SetAttribute("status", "filled");
             slotAdder.SetAttribute("owner", Helpers.OwnerValidator(owner));
             slotAdder.SetAttribute("room", room);
             slotAdder.SetAttribute("itemTotal", itemTotal);
@@ -185,7 +184,6 @@ namespace DormStorageV1
             {
                 selectedSlot.SetAttribute($"{attr}", "");
             }
-            selectedSlot.SetAttribute("status", "empty");
             StorageDB.Save(file);
             LoadStorageManifest(file);
         }
@@ -268,10 +266,6 @@ namespace DormStorageV1
             {
                 selectedNode.SetAttribute(key, replace);
             }
-            if (key.Equals("owner") && selectedNode.GetAttribute("status") == "empty")
-            {
-                selectedNode.SetAttribute("status", "filled");
-            }
             StorageDB.Save(file);
             LoadStorageManifest(StorageFilePath);
         }
@@ -296,10 +290,6 @@ namespace DormStorageV1
             selectedNode.SetAttribute("room", room);
             selectedNode.SetAttribute("itemTotal", items);
             selectedNode.SetAttribute("paid", Helpers.PaidValidator(paid, items));
-            if (selectedNode.GetAttribute("status") == "empty")
-            {
-                selectedNode.SetAttribute("status", "filled");
-            }
             StorageDB.Save(file);
             LoadStorageManifest(StorageFilePath);
         }
